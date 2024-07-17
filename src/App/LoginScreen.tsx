@@ -32,6 +32,7 @@ export default function LoginScreen({ navigation }: ProfileScreenProps) {
  
       authContext?.setToken(response); // Atualizando o token no contexto
     } catch (error) {
+      
       console.error('Error login user:', error);
     }
   };

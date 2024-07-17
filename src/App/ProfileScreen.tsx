@@ -24,6 +24,7 @@ type RootStackParamList = {
   Register: { name: string };
   Home: { name: string };
   Notification: { name: string };
+  Configuration: { name: string };
 };
 
 type ProfileScreenProps = NativeStackScreenProps<RootStackParamList, "Profile">;
@@ -96,10 +97,10 @@ export default function ProfileScreen({ navigation }: ProfileScreenProps) {
         </View>
         <View style={styles.edit}>
           <Icon
-            name="pencil"
-            size={18}
+            name="cog"
+            size={24}
             color="#FFF"
-            onPress={() => navigation.navigate("Home", { name: "" })}
+            onPress={() => navigation.navigate("Configuration", { name: "Configuration" })}
           />
         </View>
       </View>

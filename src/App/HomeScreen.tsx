@@ -7,8 +7,7 @@ import globalStyles from "../Styles/Global";
 import { useEffect, useState } from "react";
 import { MatchService } from "../Services/MatchService";
 import { MatchViewDto } from "../Interface/Dto/iMatchDto";
-import { ThemeContext } from "../Context/ThemeContext";
-import Button from "../Components/Button";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type RootStackParamList = {
   Home: { name: string };
@@ -41,9 +40,11 @@ export default function HomeScreen({ navigation }: ProfileScreenProps) {
 
   if (loading) {
     return (
-      <View style={globalStyles.container}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
+      <SafeAreaView style={globalStyles.container}>
+        <View style={[globalStyles.container, { flex: 1, justifyContent: 'center', alignItems: 'center' }]}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      </SafeAreaView>
     );
   }
 
@@ -53,16 +54,6 @@ export default function HomeScreen({ navigation }: ProfileScreenProps) {
 
       <Search matches={matches} />
 
-      <ThemeContext.Consumer>
-        {(themeContext) => {
-          return (
-            <Button
-              labelButton={themeContext?.theme} // Use labelButton em vez de children
-              onPress={themeContext?.toggleTheme}
-            />
-          );
-        }}
-      </ThemeContext.Consumer>
       <FlatList
         data={matches}
         keyExtractor={(item, index) =>

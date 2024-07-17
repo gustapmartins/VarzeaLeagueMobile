@@ -5,6 +5,7 @@ import { MatchMock } from '../../Mock/MatchMock';
 import Icon from "react-native-vector-icons/AntDesign";
 import styles from './styles';
 import { ISearch } from '../../Interface/Components/ISearch';
+import { COLORS } from '../../Styles/GlobalColors';
 
 export default function Search({ matches }: ISearch) {
     const [searchText, setSearchText] = useState('');
@@ -13,7 +14,7 @@ export default function Search({ matches }: ISearch) {
         setSearchText(text);
     };
 
-    const filteredMatches = matches.filter(match => 
+    const filteredMatches = matches.filter(match =>
         match.homeTeamModel.nameTeam.toLowerCase().includes(searchText.toLowerCase()) ||
         match.visitingTeamModel.nameTeam.toLowerCase().includes(searchText.toLowerCase())
     );
@@ -36,8 +37,10 @@ export default function Search({ matches }: ISearch) {
 
             {searchText.length > 0 && (
                 <View style={styles.modalContainer}>
-                    {MatchMock.length == 0 ? (
-                        <Text>Not Found</Text>
+                    {filteredMatches.length == 0 ? (
+                        <View style={styles.modalContent}>
+                            <Text style={{color: COLORS.primary, fontWeight: "600"}}>Not Found</Text>
+                        </View>
                     ) : (
                         filteredMatches.map((item, index) => (
                             <View style={styles.modalContent} key={index}>
