@@ -1,8 +1,8 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { MatchService } from "../Services/MatchService";
 import { AuthService } from "../Services/AuthService";
-import { matchCreateDto } from "../Dto/MatchDto";
+import { MatchCreateDto } from "../Interface/Dto/iMatchDto";
 import { StyleSheet, View } from "react-native";
 import CustomDatePicker from "../Components/CustomDatePicker";
 import TextComponent from "../Components/TextComponent";
@@ -10,6 +10,7 @@ import Button from "../Components/Button";
 import Input from "../Components/Input";
 import globalStyles from "../Styles/Global";
 import ToBack from "../Components/ToBack";
+import { AuthContext } from "../Context/AuthContext";
 
 type RootStackParamList = {
   RegisterMatch: { name: string };
@@ -27,27 +28,25 @@ export default function RegisterMatch({ navigation }: ProfileScreenProps) {
   const [local, setLocal] = useState("");
   const [formattedDate, setFormattedDate] = useState("");
 
+  const authContext = useContext(AuthContext); // Usando o AuthContext
+  
   const handleRegisterMatch = async () => {
     try {
-      const token = await AuthService.getToken();
-      console.log(token);
 
-      console.log(formattedDate);
-        
-      if (!token) {
+      if (!authContext?.token) {
         throw new Error("No token found");
       }
 
-      const matchData: matchCreateDto = {
+      const matchData: MatchCreateDto = {
         HomeTeamName: homeTeamName,
         VisitingTeamName: visitingTeamName, // Convert to number
         Local: local,
         Date: formattedDate
       };
 
-      var response = await MatchService.createMatch(matchData, token);
-      console.log(response);
+      var response = await MatchService.createMatch(matchData, authContext?.token);
       return response;
+
     } catch (error) {
       console.error('Error login user:', error);
     } finally {
@@ -101,7 +100,6 @@ export default function RegisterMatch({ navigation }: ProfileScreenProps) {
         <CustomDatePicker 
           formattedDate={formattedDate}
           setFormattedDate={setFormattedDate}
-
         />
 
         <Button

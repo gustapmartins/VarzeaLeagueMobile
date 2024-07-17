@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { IPlayerService } from '../Interface/Services/IPlayerService';
-import { playerCreateDto } from '../Dto/PlayerDto';
+import { playerCreateDto } from '../Interface/Dto/IPlayerDto';
 import { API_BASE_URL } from './IpConfig';
 
 export const PlayerService: IPlayerService = {

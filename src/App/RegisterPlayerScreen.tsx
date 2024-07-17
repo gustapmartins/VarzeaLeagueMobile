@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import Button from "../Components/Button";
 import Input from "../Components/Input";
@@ -7,8 +7,8 @@ import globalStyles from "../Styles/Global";
 import ToBack from "../Components/ToBack";
 import TextComponent from "../Components/TextComponent";
 import { PlayerService } from "../Services/PlayerService";
-import { playerCreateDto } from "../Dto/PlayerDto";
-import { AuthService } from "../Services/AuthService";
+import { PlayerCreateDto } from "../Interface/Dto/IPlayerDto";
+import { AuthContext } from "../Context/AuthContext";
 
 type RootStackParamList = {
   RegisterPlayer: { name: string };
@@ -25,23 +25,23 @@ export default function RegisterPlayer({ navigation }: ProfileScreenProps) {
   const [agePlayer, setAgePlayer] = useState<string>("");
   const [teamId, setTeamPlayer] = useState<string>("");
 
+  const authContext = useContext(AuthContext); // Usando o AuthContext
+
   const handleRegisterPlayer = async () => {
     try {
-      const token = await AuthService.getToken();
-      console.log(token);
       
-      if (!token) {
+      if (!authContext?.token) {
         throw new Error("No token found");
       }
       
-      const playerData: playerCreateDto = { 
+      const playerData: PlayerCreateDto = { 
         NamePlayer: namePlayer, 
         Age: agePlayer !== "" ? Number(agePlayer) : undefined, // Convert to number
         TeamId: teamId 
       };
 
-      var response = await PlayerService.createPlayer(playerData, token);
-      console.log(response);
+      var response = await PlayerService.createPlayer(playerData, authContext?.token);
+
       return response;
 
     } catch (error) {

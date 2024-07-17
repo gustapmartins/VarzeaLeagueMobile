@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { ITeamService } from '../Interface/Services/ITeamService';
-import { teamCreateDto } from '../Dto/TeamDto';
+import { teamCreateDto } from '../Interface/Dto/ITeamDto';
 import { API_BASE_URL } from './IpConfig';
 
 export const TeamService: ITeamService = {

@@ -1,4 +1,4 @@
-import { teamCreateDto } from "../../Dto/TeamDto";
+import { teamCreateDto } from "../Dto/ITeamDto";
 
 export interface ITeamService {
     getTeams(page: number, pageSize: number): Promise<any>;

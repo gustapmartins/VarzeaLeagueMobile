@@ -1,7 +1,7 @@
 import { GestureResponderEvent } from "react-native";
-import { TeamModel } from "./TeamDto";
+import { ITeamModel } from "../Model/ITeamModel";
 
-export interface matchCreateDto {
+export interface MatchCreateDto {
     HomeTeamName: string;
     VisitingTeamName: string;
     Local: string;
@@ -10,10 +10,8 @@ export interface matchCreateDto {
 
 export interface MatchViewDto {
     id: string;
-    homeTeamModel: TeamModel;
-    homeTeamName?: string;
-    visitingTeamModel: TeamModel;
-    visitingTeamName?: string;
+    homeTeamModel: ITeamModel;
+    visitingTeamModel: ITeamModel;
     local?: string;
     date?: string;
     teamWin?: string;

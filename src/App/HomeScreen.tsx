@@ -6,7 +6,7 @@ import Search from "../Components/Search";
 import globalStyles from "../Styles/Global";
 import { useEffect, useState } from "react";
 import { MatchService } from "../Services/MatchService";
-import { MatchViewDto } from "../Dto/MatchDto";
+import { MatchViewDto } from "../Interface/Dto/iMatchDto";
 import { ThemeContext } from "../Context/ThemeContext";
 import Button from "../Components/Button";
 
@@ -19,6 +19,7 @@ type RootStackParamList = {
 type ProfileScreenProps = NativeStackScreenProps<RootStackParamList, "Home">;
 
 export default function HomeScreen({ navigation }: ProfileScreenProps) {
+
   const [matches, setMatches] = useState<MatchViewDto[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -26,7 +27,7 @@ export default function HomeScreen({ navigation }: ProfileScreenProps) {
     const fetchMatches = async () => {
       try {
         const response = await MatchService.getMatches(1, 10);
-        console.log("test" + response);
+        console.log(response);
         setMatches(response);
 
         setLoading(false);
@@ -38,19 +39,19 @@ export default function HomeScreen({ navigation }: ProfileScreenProps) {
     fetchMatches();
   }, []);
 
-  // if (loading) {
-  //   return (
-  //     <View style={globalStyles.container}>
-  //       <ActivityIndicator size="large" color="#0000ff" />
-  //     </View>
-  //   );
-  // }
+  if (loading) {
+    return (
+      <View style={globalStyles.container}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
 
   return (
     <View style={globalStyles.container}>
       <StatusBar style="auto" />
 
-      <Search IconName="search1" />
+      <Search matches={matches} />
 
       <ThemeContext.Consumer>
         {(themeContext) => {

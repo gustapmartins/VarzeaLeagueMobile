@@ -1,4 +1,7 @@
+import { GestureResponderEvent } from "react-native";
+import { MatchViewDto } from "../Dto/iMatchDto";
+
 export interface ISearch {
-  IconName?: string;
+    matches: MatchViewDto[];
+    onPress?: (event: GestureResponderEvent) => void;
 }
- 

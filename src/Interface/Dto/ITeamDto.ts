@@ -1,4 +1,4 @@
-export interface teamCreateDto {
+export interface TeamCreateDto {
     NameTeam: string;
     State: string;
     City: string;

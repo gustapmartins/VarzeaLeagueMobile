@@ -15,7 +15,8 @@ import globalStyles from "../Styles/Global";
 import ToBack from "../Components/ToBack";
 import NotificationButton from "../Components/NotificationButton";
 import { AuthService } from "../Services/AuthService";
-import { UserModel } from "../Interface/Model/UserModel";
+import { IUserModel } from "../Interface/Model/IUserModel";
+import { NotificationService } from "../Services/NotificationService";
 
 type RootStackParamList = {
   Profile: { name: string };
@@ -28,29 +29,38 @@ type RootStackParamList = {
 type ProfileScreenProps = NativeStackScreenProps<RootStackParamList, "Profile">;
 
 export default function ProfileScreen({ navigation }: ProfileScreenProps) {
-  
-  const [user, setUser] = useState<UserModel>();
+
+  const [user, setUser] = useState<IUserModel>();
+  const [notificationCount, setNotificationCount] = useState(0); // Estado para o contador de notificações
+
 
   const authContext = useContext(AuthContext); // Usando o AuthContext
 
-  useEffect(() => {
-    const loadUser = async () => {
-      try {
-        if (!authContext?.token) {
-          return;
-        }
-        
-        const response = await AuthService.decodeToken(authContext?.token);
-
-        const deserializer = JSON.parse(JSON.stringify(response)) as UserModel;
-
-        setUser(deserializer);
-
-      } catch (error) {
-        console.error("Erro ao verificar token:", error);
+  const loadUser = async () => {
+    try {
+      if (!authContext?.token) {
+        return;
       }
-    };
+      const response = await AuthService.decodeToken(authContext?.token);
+      const deserializer = JSON.parse(JSON.stringify(response)) as IUserModel;
 
+      setUser(deserializer);
+    } catch (error) {
+      console.error("Erro ao verificar token:", error);
+    }
+  };
+
+  const fetchNotifications = async () => {
+    try {
+      const response = await NotificationService.getNotification(authContext?.token, 1, 10);
+      setNotificationCount(response.length);
+    } catch (error) {
+      console.error("Erro ao buscar notificações:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotifications();
     loadUser();
   }, [authContext?.token]);
 
@@ -67,7 +77,7 @@ export default function ProfileScreen({ navigation }: ProfileScreenProps) {
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <ToBack onPress={() => navigation.navigate("Home", { name: "Home" })} />
         <NotificationButton
-          counter={2}
+          counter={notificationCount}
           onPress={() =>
             navigation.navigate("Notification", { name: "Notification" })
           }
@@ -110,7 +120,7 @@ export default function ProfileScreen({ navigation }: ProfileScreenProps) {
       <View style={styles.infoUserContainer}>
         <View style={styles.infoUser}>
           <Icon style={styles.icon} name="person" />
-          <Text style={styles.text}>Alexandra de morais</Text>
+          <Text style={styles.text}>{user?.id}</Text>
         </View>
 
         <View style={styles.infoUser}>
@@ -120,7 +130,7 @@ export default function ProfileScreen({ navigation }: ProfileScreenProps) {
 
         <View style={styles.infoUser}>
           <Icon style={styles.icon} name="reader-sharp" />
-          <Text style={styles.text}>55588899928</Text>
+          <Text style={styles.text}>{user?.cpf}</Text>
         </View>
 
         <View style={styles.infoUser}>

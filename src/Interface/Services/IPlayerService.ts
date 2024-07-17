@@ -1,4 +1,4 @@
-import { playerCreateDto } from "../../Dto/PlayerDto";
+import { playerCreateDto } from "../Dto/IPlayerDto";
 
 export interface IPlayerService {
     getPlayers(page: number, pageSize: number, teamId: string | null): Promise<any>;

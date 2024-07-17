@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Image, StyleSheet, Text, TextInput, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import { useState } from "react";
 import { AuthService } from "../Services/AuthService";
 import SocialMediaButton from "../Components/SocialMediaButton";
@@ -22,12 +22,18 @@ export default function RegisterUserScreen({ navigation }: ProfileScreenProps) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("")
   const [cpf, setCpf] = useState("")
-
+      
   const handleRegister = async () => {
     try {
       var response = await AuthService.registerUser(userName, email, password, confirmPassword, cpf, 1);
+      
+      if (!response) {
+        throw new Error("No response received from the server");
+      }
       return response;
+    
     } catch (error) {
+    
       console.error('Error registering user:', error);
     } finally {
       navigation.navigate('Login', { name: 'Register' });

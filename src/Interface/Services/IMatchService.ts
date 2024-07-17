@@ -1,9 +1,9 @@
-import { matchCreateDto } from "../../Dto/MatchDto";
+import { MatchCreateDto } from "../Dto/iMatchDto";
 
 export interface IMatchService {
     getMatches(Page: number, PageSize: number): Promise<any>;
     getMatchById(id: string): Promise<any>;
-    createMatch(MatchData: matchCreateDto, Token: string): Promise<any>;
+    createMatch(MatchData: MatchCreateDto, Token: string): Promise<any>;
     updateMatch(id: string, matchUpdateDto: any): Promise<any>;
     deleteMatch(id: string): Promise<any>;
 }

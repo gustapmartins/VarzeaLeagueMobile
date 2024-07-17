@@ -1,23 +1,27 @@
 import React, { useState } from 'react';
 import { View, Text, Image } from 'react-native';
 import { TextInput } from 'react-native-paper';
-import { ISearch } from '../../Interface/Components/ISearch';
 import { MatchMock } from '../../Mock/MatchMock';
 import Icon from "react-native-vector-icons/AntDesign";
 import styles from './styles';
+import { ISearch } from '../../Interface/Components/ISearch';
 
-export default function Search({ IconName }: ISearch) {
+export default function Search({ matches }: ISearch) {
     const [searchText, setSearchText] = useState('');
 
     const handleSearch = (text: string) => {
-        setSearchText(text)
-        console.log('Searching for:', text);
+        setSearchText(text);
     };
+
+    const filteredMatches = matches.filter(match => 
+        match.homeTeamModel.nameTeam.toLowerCase().includes(searchText.toLowerCase()) ||
+        match.visitingTeamModel.nameTeam.toLowerCase().includes(searchText.toLowerCase())
+    );
 
     return (
         <>
             <View style={styles.card}>
-                {IconName != null && <Icon style={styles.icon} name={IconName} />}
+                <Icon style={styles.icon} name="search1" />
                 <TextInput
                     style={styles.input}
                     placeholder="Search"
@@ -35,16 +39,16 @@ export default function Search({ IconName }: ISearch) {
                     {MatchMock.length == 0 ? (
                         <Text>Not Found</Text>
                     ) : (
-                        MatchMock.map((item, index) => (
+                        filteredMatches.map((item, index) => (
                             <View style={styles.modalContent} key={index}>
                                 <View style={styles.teamContent}>
-                                    <Image source={{ uri: item.homeTeam.img }} style={styles.img} />
-                                    <Text style={styles.goals}>{item.homeTeam.goals}</Text>
+                                    <Image source={require("./brasao.png")} style={styles.img} />
+                                    <Text style={styles.goals}>{0}</Text>
                                 </View>
                                 <Text style={styles.vsText}>VS</Text>
                                 <View style={styles.teamContent}>
-                                    <Image source={{ uri: item.visitingTeam.img }} style={styles.img} />
-                                    <Text style={styles.goals}>{item.visitingTeam.goals}</Text>
+                                    <Image source={require("./brasao.png")} style={styles.img} />
+                                    <Text style={styles.goals}>{0}</Text>
                                 </View>
                             </View>
                         ))
