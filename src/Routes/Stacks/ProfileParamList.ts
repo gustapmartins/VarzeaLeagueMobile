@@ -1,10 +1,11 @@
 type ProfileParamList = {
     Login: { name: string };
-    Home: { name: string }; // Defina os nomes das telas corretamente
+    Home: { name: string };
     Profile: { name: string };
     ForgetPassword: { name: string };
     Notification: { name: string };
     NewPassword: { name: string };
+    Configuration: { name: string };
     ControlPainel: { name: string };
     RegisterUser: { name: string };
     RegisterPlayer: { name: string };

@@ -1,3 +1,6 @@
+import { Role } from "../../Enum/Role";
+
+
 export interface IUserModel {
     id: string;
     username: string;

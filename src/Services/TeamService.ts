@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ITeamService } from '../Interface/Services/ITeamService';
-import { teamCreateDto } from '../Interface/Dto/ITeamDto';
 import { API_BASE_URL } from './IpConfig';
+import { ITeamCreateDto } from '../Interface/Dto/ITeamDto';
 
 export const TeamService: ITeamService = {
   
@@ -27,7 +27,7 @@ export const TeamService: ITeamService = {
     }
   },
 
-  async createTeam(teamData: teamCreateDto, Token: String) {
+  async createTeam(teamData: ITeamCreateDto, Token: String) {
     try {
       const response = await axios.post(`${API_BASE_URL}/api/v1/Team/created-team`, teamData, {
         headers: {

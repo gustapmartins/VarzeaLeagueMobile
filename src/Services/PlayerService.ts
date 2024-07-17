@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { IPlayerService } from '../Interface/Services/IPlayerService';
-import { playerCreateDto } from '../Interface/Dto/IPlayerDto';
+import { PlayerCreateDto } from '../Interface/Dto/IPlayerDto';
 import { API_BASE_URL } from './IpConfig';
 
 export const PlayerService: IPlayerService = {
@@ -30,7 +30,7 @@ export const PlayerService: IPlayerService = {
     }
   },
 
-  createPlayer: async (playerData: playerCreateDto, token: string) => {
+  createPlayer: async (playerData: PlayerCreateDto, token: string) => {
     try {
       const response = await axios.post(`${API_BASE_URL}/api/v1/Player/created-player`, playerData,
         {

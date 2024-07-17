@@ -7,7 +7,7 @@ import RegisterMatch from "../../App/RegisterMatchScreen";
 
 const HomeStack = createNativeStackNavigator<ProfileParamList>();
 
-export default function NewStackScreen() {
+export default function ControlPainelScreen() {
     return (
         <HomeStack.Navigator>
             <HomeStack.Screen

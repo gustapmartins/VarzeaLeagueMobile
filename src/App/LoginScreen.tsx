@@ -19,6 +19,7 @@ type ProfileScreenProps = NativeStackScreenProps<RootStackParamList, "Login">;
 export default function LoginScreen({ navigation }: ProfileScreenProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  
   const authContext = useContext(AuthContext); // Usando o AuthContext
 
   const handleLogin = async () => {

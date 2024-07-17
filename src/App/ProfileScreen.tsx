@@ -33,7 +33,6 @@ export default function ProfileScreen({ navigation }: ProfileScreenProps) {
   const [user, setUser] = useState<IUserModel>();
   const [notificationCount, setNotificationCount] = useState(0); // Estado para o contador de notificações
 
-
   const authContext = useContext(AuthContext); // Usando o AuthContext
 
   const loadUser = async () => {
@@ -43,6 +42,8 @@ export default function ProfileScreen({ navigation }: ProfileScreenProps) {
       }
       const response = await AuthService.decodeToken(authContext?.token);
       const deserializer = JSON.parse(JSON.stringify(response)) as IUserModel;
+
+      console.log(deserializer);
 
       setUser(deserializer);
     } catch (error) {

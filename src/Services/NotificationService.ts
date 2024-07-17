@@ -15,7 +15,7 @@ export const NotificationService: INotificationService = {
       });
       return response.data;
     } catch (error) {
-      console.error('Error fetching players:', error);
+      console.error('Error fetching Notification:', error);
       throw error;
     }
   },
