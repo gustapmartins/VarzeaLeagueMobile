@@ -8,7 +8,9 @@ import ToBack from "../Components/ToBack";
 import TextComponent from "../Components/TextComponent";
 import { PlayerService } from "../Services/PlayerService";
 import { PlayerCreateDto } from "../Interface/Dto/IPlayerDto";
-import { AuthContext } from "../Context/AuthContext";
+import UseUserContext from "../Hook/UseUserContext";
+import useAuthContext from "../Hook/UseAuthContext";
+
 
 type RootStackParamList = {
   RegisterPlayer: { name: string };
@@ -25,22 +27,22 @@ export default function RegisterPlayer({ navigation }: ProfileScreenProps) {
   const [agePlayer, setAgePlayer] = useState<string>("");
   const [teamId, setTeamPlayer] = useState<string>("");
 
-  const authContext = useContext(AuthContext); // Usando o AuthContext
+  const { token } = useAuthContext(); // Usando o AuthContext
 
   const handleRegisterPlayer = async () => {
     try {
-      
-      if (!authContext?.token) {
+
+      if (token) {
         throw new Error("No token found");
       }
-      
-      const playerData: PlayerCreateDto = { 
-        NamePlayer: namePlayer, 
+
+      const playerData: PlayerCreateDto = {
+        NamePlayer: namePlayer,
         Age: agePlayer !== "" ? Number(agePlayer) : undefined, // Convert to number
-        TeamId: teamId 
+        TeamId: teamId
       };
 
-      var response = await PlayerService.createPlayer(playerData, authContext?.token);
+      var response = await PlayerService.createPlayer(playerData, token);
 
       return response;
 

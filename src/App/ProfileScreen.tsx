@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { COLORS } from "../Styles/GlobalColors";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
 import globalStyles from "../Styles/Global";
 import ToBack from "../Components/ToBack";
@@ -18,6 +18,7 @@ import { IUserModel } from "../Interface/Model/IUserModel";
 import { NotificationService } from "../Services/NotificationService";
 import useAuthContext from "../Hook/UseAuthContext";
 import UseUserContext from "../Hook/UseUserContext";
+import UseNotificationContext from "../Hook/UseNotificationContext";
 
 type RootStackParamList = {
   Profile: { name: string };
@@ -31,18 +32,19 @@ type RootStackParamList = {
 type ProfileScreenProps = NativeStackScreenProps<RootStackParamList, "Profile">;
 
 export default function ProfileScreen({ navigation }: ProfileScreenProps) {
-  const [notificationCount, setNotificationCount] = useState(0); // Estado para o contador de notificações
 
-  const { token, setToken } = useAuthContext(); // Usando o AuthContext
-  const { user, setUser } = UseUserContext(); // Usando o UserContext
+  const { notifications, setNotifications } = UseNotificationContext();
+  const { token, setToken } = useAuthContext();
+  const { user, setUser } = UseUserContext();
 
   const loadUser = async () => {
     try {
-      if (token) {
+      if (!token) {
         return;
       }
-      
+
       const response = await AuthService.decodeToken(token);
+
       const deserializer = JSON.parse(JSON.stringify(response)) as IUserModel;
 
       setUser(deserializer);
@@ -53,18 +55,24 @@ export default function ProfileScreen({ navigation }: ProfileScreenProps) {
 
   const fetchNotifications = async () => {
     try {
+      
+      if(!token){
+        return;
+      }
+
       const response = await NotificationService.getNotification(
         token,
         1,
         10
       );
 
+      console.log(response);
+
       if (!response || response.length === 0) {
-        setNotificationCount(0);
-        return null; // ou return undefined;
+        return null;
       }
 
-      setNotificationCount(response.length);
+      setNotifications(response);
     } catch (error) {
       console.error("Erro ao buscar notificações:", error);
     }
@@ -88,7 +96,7 @@ export default function ProfileScreen({ navigation }: ProfileScreenProps) {
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <ToBack onPress={() => navigation.navigate("Home", { name: "Home" })} />
         <NotificationButton
-          counter={notificationCount}
+          counter={notifications.length}
           onPress={() =>
             navigation.navigate("Notification", { name: "Notification" })
           }
@@ -126,7 +134,7 @@ export default function ProfileScreen({ navigation }: ProfileScreenProps) {
             },
           ]}
         >
-          {user?.username.toUpperCase()}
+          {user?.username ? user?.username.toUpperCase() : ""}
         </Text>
       </View>
 
@@ -148,7 +156,7 @@ export default function ProfileScreen({ navigation }: ProfileScreenProps) {
 
         <View style={styles.infoUser}>
           <Icon style={styles.icon} name="calendar" />
-          <Text style={styles.text}> {user?.dataCreated.split(" ")[0]} </Text>
+          <Text style={styles.text}> {user?.dataCreated ? user.dataCreated.split(" ")[0] : ""} </Text>
         </View>
       </View>
 

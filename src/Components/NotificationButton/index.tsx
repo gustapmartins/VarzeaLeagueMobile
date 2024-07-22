@@ -7,7 +7,9 @@ export default function NotificationButton({ onPress, counter }: INotification) 
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.container}>
-        <Text style={styles.counter}> {counter} </Text>
+        {
+          counter > 0 && <Text style={styles.counter}>{counter}</Text>
+        }
         <Icon style={styles.notification} name="notifications-outline" />
       </View>
     </TouchableWithoutFeedback>

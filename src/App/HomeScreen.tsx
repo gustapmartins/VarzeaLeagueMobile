@@ -9,6 +9,7 @@ import { MatchService } from "../Services/MatchService";
 import { MatchViewDto } from "../Interface/Dto/iMatchDto";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../Components/Button";
+import UseMatchContext from "../Hook/UseMatchContext";
 
 type RootStackParamList = {
   Home: { name: string };
@@ -18,17 +19,17 @@ type RootStackParamList = {
 
 type ProfileScreenProps = NativeStackScreenProps<RootStackParamList, "Home">;
 
-export default function HomeScreen({ navigation }: ProfileScreenProps) {
+export default function HomeScreen({ navigation, route }: ProfileScreenProps) {
 
-  const [matches, setMatches] = useState<MatchViewDto[]>([]);
   const [loading, setLoading] = useState(true);
+  const { matchs, setMatchs } = UseMatchContext();
 
   useEffect(() => {
     const fetchMatches = async () => {
       try {
         const response = await MatchService.getMatches(1, 10);
-        console.log(response);
-        setMatches(response);
+
+        setMatchs(response);
 
         setLoading(false);
       } catch (error) {
@@ -53,7 +54,7 @@ export default function HomeScreen({ navigation }: ProfileScreenProps) {
     <View style={globalStyles.container}>
       <StatusBar style="auto" />
 
-      <Search matches={matches} />
+      <Search matches={matchs} />
 
       <View style={{ marginVertical: 10 }} >
         <Text>Last Transaction</Text>
@@ -61,7 +62,7 @@ export default function HomeScreen({ navigation }: ProfileScreenProps) {
       </View>
 
       <FlatList
-        data={matches}
+        data={matchs}
         keyExtractor={(item, index) =>
           item.id ? item.id.toString() : index.toString()
         }

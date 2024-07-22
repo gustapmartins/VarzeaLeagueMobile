@@ -15,7 +15,7 @@ const ProfileStack = createNativeStackNavigator<ProfileParamList>();
 
 export default function ProfileStackScreen() {
   const { token, setToken } = useAuthContext()!; // Usando o AuthContext
-  
+
   const [isSignedIn, setIsSignedIn] = useState(true);
 
   useEffect(() => {

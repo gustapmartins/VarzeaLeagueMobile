@@ -7,8 +7,8 @@ import globalStyles from "../Styles/Global";
 import ToBack from "../Components/ToBack";
 import TextComponent from "../Components/TextComponent";
 import { TeamService } from "../Services/TeamService";
-import { TeamCreateDto } from "../Interface/Dto/ITeamDto";
-import { AuthContext } from "../Context/AuthContext";
+import useAuthContext from "../Hook/UseAuthContext";
+import { ITeamCreateDto } from "../Interface/Dto/ITeamDto";
 
 type RootStackParamList = {
   RegisterTeam: { name: string };
@@ -25,22 +25,22 @@ export default function RegisterTeam({ navigation }: ProfileScreenProps) {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
 
-  const authContext = useContext(AuthContext); // Usando o AuthContext
+  const {token} = useAuthContext(); // Usando o AuthContext
 
   const handleRegisterTeam = async () => {
     try {
 
-      if (!authContext?.token) {
+      if (token) {
         throw new Error("No token found");
       }
       
-      const teamData: TeamCreateDto = { 
+      const teamData: ITeamCreateDto = { 
         NameTeam: nameTeam,
         City: city,
         State: state
       };
 
-      const response = await TeamService.createTeam(teamData, authContext?.token);
+      const response = await TeamService.createTeam(teamData, token);
       return response;
 
     } catch (error) {

@@ -6,11 +6,11 @@ import TextComponent from "../Components/TextComponent";
 import globalStyles from "../Styles/Global";
 import NotificationCard from "../Components/NotificationCard";
 import { useState } from "react";
-import { NotificationService } from "../Services/NotificationService";
 import { INotificationViewDto } from "../Interface/Dto/INotificationDto";
 import { ActivityIndicator } from "react-native-paper";
 import { useFocusEffect } from "@react-navigation/native";
 import useAuthContext from "../Hook/UseAuthContext";
+import UseNotificationContext from "../Hook/UseNotificationContext";
 
 type RootStackParamList = {
   Notification: { name: string };
@@ -23,23 +23,16 @@ type ProfileScreenProps = NativeStackScreenProps<
 >;
 
 export default function NotificationScreen({ navigation }: ProfileScreenProps) {
-  const [notification, setNotification] = useState<INotificationViewDto[]>([]);
-  const [loading, setLoading] = useState(true);
 
-  const {token} = useAuthContext(); // Usando o AuthContext
+  const [loading, setLoading] = useState(true);
+  const { notifications } = UseNotificationContext(); // Usando o NotificationContext
 
   const fetchMatches = async () => {
     try {
-      if (token) {
-        return;
+
+      if(notifications != null) {
+        setLoading(false);
       }
-      const response = await NotificationService.getNotification(
-        token,
-        1,
-        10
-      );
-      setNotification(response);
-      setLoading(false);
     } catch (error) {
       setLoading(false);
     }
@@ -80,11 +73,11 @@ export default function NotificationScreen({ navigation }: ProfileScreenProps) {
       <TextComponent>Notificação</TextComponent>
 
       <View>
-        
+
       </View>
 
       <FlatList
-        data={notification}
+        data={notifications}
         keyExtractor={(item, index) =>
           item.Id ? item.Id.toString() : index.toString()
         }

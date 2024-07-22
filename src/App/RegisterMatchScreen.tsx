@@ -10,7 +10,7 @@ import Button from "../Components/Button";
 import Input from "../Components/Input";
 import globalStyles from "../Styles/Global";
 import ToBack from "../Components/ToBack";
-import { AuthContext } from "../Context/AuthContext";
+import useAuthContext from "../Hook/UseAuthContext";
 
 type RootStackParamList = {
   RegisterMatch: { name: string };
@@ -28,12 +28,12 @@ export default function RegisterMatch({ navigation }: ProfileScreenProps) {
   const [local, setLocal] = useState("");
   const [formattedDate, setFormattedDate] = useState("");
 
-  const authContext = useContext(AuthContext); // Usando o AuthContext
-  
+  const { token } = useAuthContext(); // Usando o AuthContext
+
   const handleRegisterMatch = async () => {
     try {
 
-      if (!authContext?.token) {
+      if (token) {
         throw new Error("No token found");
       }
 
@@ -44,7 +44,7 @@ export default function RegisterMatch({ navigation }: ProfileScreenProps) {
         Date: formattedDate
       };
 
-      var response = await MatchService.createMatch(matchData, authContext?.token);
+      var response = await MatchService.createMatch(matchData, token);
       return response;
 
     } catch (error) {
@@ -97,7 +97,7 @@ export default function RegisterMatch({ navigation }: ProfileScreenProps) {
           checkField={false}
         />
 
-        <CustomDatePicker 
+        <CustomDatePicker
           formattedDate={formattedDate}
           setFormattedDate={setFormattedDate}
         />

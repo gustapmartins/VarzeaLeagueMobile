@@ -4,7 +4,7 @@ import { INotificationViewDto } from "../../Interface/Dto/INotificationDto";
 interface NotificationContextType {
     notifications: INotificationViewDto[];
     setNotifications: (notifications: INotificationViewDto[]) => void;
-    // loading: boolean;
+    loading: boolean;
     // refreshNotifications: () => void;
 }
 

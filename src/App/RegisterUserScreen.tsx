@@ -30,8 +30,8 @@ export default function RegisterUserScreen({ navigation }: ProfileScreenProps) {
       if (!response) {
         throw new Error("No response received from the server");
       }
+      
       return response;
-    
     } catch (error) {
     
       console.error('Error registering user:', error);

@@ -6,11 +6,12 @@ interface ProviderProps {
   children: ReactNode;
 }
 
-export default function ThemeProvider({ children }: ProviderProps) {
+export default function NotificationProvider({ children }: ProviderProps) {
   const [notifications, setNotifications] = useState<INotificationViewDto[]>([]);
+  var loading = false;
 
   return (
-    <NotificationContext.Provider value={{ notifications, setNotifications }}>
+    <NotificationContext.Provider value={{ notifications, setNotifications, loading }}>
       {children}
     </NotificationContext.Provider>
   );
