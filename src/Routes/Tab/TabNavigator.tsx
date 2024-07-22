@@ -4,12 +4,10 @@ import HomeStackScreen from "../Stacks/HomeStackScreen";
 import Icon from "react-native-vector-icons/AntDesign";
 import ButtonNew from "../../Components/ButtoNew";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { AuthContext } from "../../Context/AuthContext";
-import { useContext, useEffect, useState } from "react";
-import { AuthService } from "../../Services/AuthService";
-import { IUserModel } from "../../Interface/Model/IUserModel";
 import { COLORS } from "../../Styles/GlobalColors";
-import { Role } from "../../Enum/Role";
+import { Role } from "../../Enum/Role";[]
+import UseUserContext from "../../Hook/UseUserContext";
+
 
 type ProfileStackParamList = {
   HomeStack: { name: string }; // Defina os nomes das telas corretamente
@@ -20,27 +18,8 @@ type ProfileStackParamList = {
 const Tab = createBottomTabNavigator<ProfileStackParamList>();
 
 export function TabNavigator() {
-
-  const { token, setToken } = useContext(AuthContext)!; // Usando o AuthContext
-  const [user, setUser] = useState<IUserModel>();
-
-  useEffect(() => {
-    const checkToken = async () => {
-      if (token) {
-        try {
-          const response = await AuthService.decodeToken(token);
-          const deserializer = response as IUserModel;
-          console.log(deserializer);
-          setUser(deserializer);
-        } catch (error) {
-          console.error('Error decoding token:', error);
-          // Handle error appropriately, e.g., show a message to the user
-        }
-      }
-    };
-
-    checkToken();
-  }, [token]);
+  
+  const { user } = UseUserContext(); // Usando o UserContext
 
   return (
     <Tab.Navigator

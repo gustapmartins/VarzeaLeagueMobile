@@ -4,8 +4,8 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start --tunnel",
-    "android": "expo start --android --tunnel",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web"
   },
   "dependencies": {
@@ -17,6 +17,7 @@
     "axios": "^1.7.2",
     "expo": "~51.0.2",
     "expo-font": "~12.0.5",
+    "expo-image": "~1.12.13",
     "expo-network": "~6.0.1",
     "expo-status-bar": "~1.12.1",
     "jwt-decode": "^4.0.0",
@@ -34,6 +35,7 @@
     "@types/react": "~18.2.45",
     "@types/react-native-datepicker": "^1.7.6",
     "@types/react-native-vector-icons": "^6.4.18",
+    "metro-config": "^0.80.9",
     "typescript": "^5.3.3"
   },
   "private": true

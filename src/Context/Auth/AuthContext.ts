@@ -1,4 +1,4 @@
-import React, { createContext } from 'react';
+import { createContext } from 'react';
 
 // Definindo o tipo do contexto
 interface AuthContextType {

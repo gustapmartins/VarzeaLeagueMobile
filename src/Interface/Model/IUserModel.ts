@@ -8,5 +8,5 @@ export interface IUserModel {
     cpf: string;
     role: Role;
     accountStatus: AccountStatus;
-    dateCreated: Date;
+    dataCreated: string;
 }

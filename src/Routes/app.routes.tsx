@@ -1,27 +1,19 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { ThemeContext } from "../Context/ThemeContext";
-import { useState } from "react";
 import { TabNavigator } from "./Tab/TabNavigator";
-import { AuthContext } from "../Context/AuthContext";
+import AuthProvider from "../Context/Auth/AuthProvider";
+import ThemeProvider from "../Context/Theme/ThemeProvider";
+import UserProvider from "../Context/User/UserProvider";
 
 export function AppRoutes() {
-  const [theme, setTheme] = useState<string>("light");
-  const [token, setToken] = useState<string>("");
-
   return (
     <NavigationContainer>
-      <ThemeContext.Provider
-        value={{
-          theme,
-          toggleTheme: () => {
-            setTheme(theme === "light" ? "dark" : "light");
-          },
-        }}
-      >
-        <AuthContext.Provider value={{ token, setToken }}>
-          <TabNavigator />
-        </AuthContext.Provider>
-      </ThemeContext.Provider>
+      <ThemeProvider>
+        <AuthProvider>
+          <UserProvider>
+            <TabNavigator />
+          </UserProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </NavigationContainer>
   );
 }

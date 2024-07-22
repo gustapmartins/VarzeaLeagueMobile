@@ -1,11 +1,11 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import SocialMediaButton from "../Components/SocialMediaButton";
 import Button from "../Components/Button";
 import Input from "../Components/Input";
 import { AuthService } from "../Services/AuthService";
-import { AuthContext } from "../Context/AuthContext";
+import useAuthContext from "../Hook/UseAuthContext";
 
 type RootStackParamList = {
   Login: { name: string };
@@ -19,21 +19,20 @@ type ProfileScreenProps = NativeStackScreenProps<RootStackParamList, "Login">;
 export default function LoginScreen({ navigation }: ProfileScreenProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
-  const authContext = useContext(AuthContext); // Usando o AuthContext
+
+  const { setToken } = useAuthContext(); // Usando o AuthContext
 
   const handleLogin = async () => {
     try {
-      const response = await AuthService.login(email,  password);
+      const response = await AuthService.login(email, password);
 
       if (!response) {
         throw new Error("No token received from the server");
       }
- 
-      authContext?.setToken(response); // Atualizando o token no contexto
+
+      setToken(response); // Atualizando o token no contexto
     } catch (error) {
-      
-      console.error('Error login user:', error);
+      console.error("Error login user:", error);
     }
   };
 
@@ -67,9 +66,13 @@ export default function LoginScreen({ navigation }: ProfileScreenProps) {
           checkField={false}
         />
 
-        <Button labelButton="Login" borderRadius={10} onPress={() => {
-          handleLogin();
-        }} />
+        <Button
+          labelButton="Login"
+          borderRadius={10}
+          onPress={() => {
+            handleLogin();
+          }}
+        />
 
         <View style={styles.section}>
           <Text

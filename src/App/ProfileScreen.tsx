@@ -8,8 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { COLORS } from "../Styles/GlobalColors";
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../Context/AuthContext";
+import { useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
 import globalStyles from "../Styles/Global";
 import ToBack from "../Components/ToBack";
@@ -17,6 +16,8 @@ import NotificationButton from "../Components/NotificationButton";
 import { AuthService } from "../Services/AuthService";
 import { IUserModel } from "../Interface/Model/IUserModel";
 import { NotificationService } from "../Services/NotificationService";
+import useAuthContext from "../Hook/UseAuthContext";
+import UseUserContext from "../Hook/UseUserContext";
 
 type RootStackParamList = {
   Profile: { name: string };
@@ -30,21 +31,19 @@ type RootStackParamList = {
 type ProfileScreenProps = NativeStackScreenProps<RootStackParamList, "Profile">;
 
 export default function ProfileScreen({ navigation }: ProfileScreenProps) {
-
-  const [user, setUser] = useState<IUserModel>();
   const [notificationCount, setNotificationCount] = useState(0); // Estado para o contador de notificações
 
-  const authContext = useContext(AuthContext); // Usando o AuthContext
+  const { token, setToken } = useAuthContext(); // Usando o AuthContext
+  const { user, setUser } = UseUserContext(); // Usando o UserContext
 
   const loadUser = async () => {
     try {
-      if (!authContext?.token) {
+      if (token) {
         return;
       }
-      const response = await AuthService.decodeToken(authContext?.token);
+      
+      const response = await AuthService.decodeToken(token);
       const deserializer = JSON.parse(JSON.stringify(response)) as IUserModel;
-
-      console.log(deserializer);
 
       setUser(deserializer);
     } catch (error) {
@@ -54,7 +53,17 @@ export default function ProfileScreen({ navigation }: ProfileScreenProps) {
 
   const fetchNotifications = async () => {
     try {
-      const response = await NotificationService.getNotification(authContext?.token, 1, 10);
+      const response = await NotificationService.getNotification(
+        token,
+        1,
+        10
+      );
+
+      if (!response || response.length === 0) {
+        setNotificationCount(0);
+        return null; // ou return undefined;
+      }
+
       setNotificationCount(response.length);
     } catch (error) {
       console.error("Erro ao buscar notificações:", error);
@@ -64,11 +73,11 @@ export default function ProfileScreen({ navigation }: ProfileScreenProps) {
   useEffect(() => {
     fetchNotifications();
     loadUser();
-  }, [authContext?.token]);
+  }, [token]);
 
   const logout = async () => {
     try {
-      authContext?.setToken("");
+      setToken("");
     } catch (error) {
       console.error("Erro ao verificar token:", error);
     }
@@ -100,7 +109,9 @@ export default function ProfileScreen({ navigation }: ProfileScreenProps) {
             name="cog"
             size={24}
             color="#FFF"
-            onPress={() => navigation.navigate("Configuration", { name: "Configuration" })}
+            onPress={() =>
+              navigation.navigate("Configuration", { name: "Configuration" })
+            }
           />
         </View>
       </View>
@@ -137,7 +148,7 @@ export default function ProfileScreen({ navigation }: ProfileScreenProps) {
 
         <View style={styles.infoUser}>
           <Icon style={styles.icon} name="calendar" />
-          <Text style={styles.text}>25/05/2023</Text>
+          <Text style={styles.text}> {user?.dataCreated.split(" ")[0]} </Text>
         </View>
       </View>
 

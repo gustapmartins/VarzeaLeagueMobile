@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
-import { ActivityIndicator, FlatList, View } from "react-native";
+import { ActivityIndicator, FlatList, View, Text } from "react-native";
 import FootballCard from "../Components/FootballCard";
 import Search from "../Components/Search";
 import globalStyles from "../Styles/Global";
@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { MatchService } from "../Services/MatchService";
 import { MatchViewDto } from "../Interface/Dto/iMatchDto";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Button from "../Components/Button";
 
 type RootStackParamList = {
   Home: { name: string };
@@ -53,6 +54,11 @@ export default function HomeScreen({ navigation }: ProfileScreenProps) {
       <StatusBar style="auto" />
 
       <Search matches={matches} />
+
+      <View style={{ marginVertical: 10 }} >
+        <Text>Last Transaction</Text>
+        <Button></Button>
+      </View>
 
       <FlatList
         data={matches}
