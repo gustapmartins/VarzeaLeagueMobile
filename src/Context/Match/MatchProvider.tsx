@@ -1,6 +1,6 @@
 import { ReactNode, useState } from "react";
 import { MatchContext } from "./MatchContext";
-import { MatchViewDto } from "../../Interface/Dto/iMatchDto";
+import { MatchViewDto } from "../../Interface/Dto/IMatchDto";
 
 interface ProviderProps {
   children: ReactNode;

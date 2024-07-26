@@ -14,7 +14,7 @@ import useAuthContext from "../../Hook/UseAuthContext";
 const ProfileStack = createNativeStackNavigator<ProfileParamList>();
 
 export default function ProfileStackScreen() {
-  const { token, setToken } = useAuthContext()!; // Usando o AuthContext
+  const { token, setToken } = useAuthContext()!;
 
   const [isSignedIn, setIsSignedIn] = useState(true);
 

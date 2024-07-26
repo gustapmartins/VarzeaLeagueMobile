@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, Image, TouchableWithoutFeedback } from "react-native";
 import { styles } from "./styles";
-import { MatchViewDto } from "../../Interface/Dto/iMatchDto";
+import { MatchViewDto } from "../../Interface/Dto/IMatchDto";
 
 export default function FootballCard({
   homeTeamModel,

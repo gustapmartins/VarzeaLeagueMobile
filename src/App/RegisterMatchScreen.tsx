@@ -2,7 +2,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useContext, useState } from "react";
 import { MatchService } from "../Services/MatchService";
 import { AuthService } from "../Services/AuthService";
-import { MatchCreateDto } from "../Interface/Dto/iMatchDto";
+import { MatchCreateDto } from "../Interface/Dto/IMatchDto";
 import { StyleSheet, View } from "react-native";
 import CustomDatePicker from "../Components/CustomDatePicker";
 import TextComponent from "../Components/TextComponent";

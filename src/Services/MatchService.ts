@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { IMatchService } from '../Interface/Services/IMatchService';
 import { API_BASE_URL } from './IpConfig';
-import { MatchCreateDto } from '../Interface/Dto/iMatchDto';
+import { MatchCreateDto } from '../Interface/Dto/IMatchDto';
 
 export const MatchService: IMatchService = {
   getMatches: async (page: number = 1, pageSize: number = 10) => {

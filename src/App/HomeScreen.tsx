@@ -6,7 +6,7 @@ import Search from "../Components/Search";
 import globalStyles from "../Styles/Global";
 import { useEffect, useState } from "react";
 import { MatchService } from "../Services/MatchService";
-import { MatchViewDto } from "../Interface/Dto/iMatchDto";
+import { MatchViewDto } from "../Interface/Dto/IMatchDto";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "../Components/Button";
 import UseMatchContext from "../Hook/UseMatchContext";

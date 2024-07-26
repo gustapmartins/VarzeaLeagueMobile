@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { MatchViewDto } from "../../Interface/Dto/iMatchDto";
+import { MatchViewDto } from "../../Interface/Dto/IMatchDto";
 
 interface MatchContextType {
     matchs: MatchViewDto[];

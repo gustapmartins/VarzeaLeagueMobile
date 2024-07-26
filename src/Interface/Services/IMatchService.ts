@@ -1,4 +1,4 @@
-import { MatchCreateDto } from "../Dto/iMatchDto";
+import { MatchCreateDto } from "../Dto/IMatchDto";
 
 export interface IMatchService {
     getMatches(Page: number, PageSize: number): Promise<any>;
