@@ -8,11 +8,14 @@ export default function Button({
   borderRadius,
   heightButton,
   widthButton,
+  marginTop
 }: IButton) {
-  const styles = createStyles(widthButton ?? null, heightButton ?? null, borderRadius ?? 0);
+  const styles = createStyles(widthButton ?? null, heightButton ?? null, borderRadius ?? 0, marginTop ?? 10);
 
   return (
-    <TouchableOpacity style={{ ...styles.container, width: widthButton, height: heightButton }} onPress={onPress}>
+    <TouchableOpacity style={{
+      ...styles.container
+    }} onPress={onPress}>
       {labelButton && <Text style={styles.text}>{labelButton}</Text>}
     </TouchableOpacity>
   );

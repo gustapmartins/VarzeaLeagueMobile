@@ -4,8 +4,9 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import SocialMediaButton from "../Components/SocialMediaButton";
 import Button from "../Components/Button";
 import Input from "../Components/Input";
-import { AuthService } from "../Services/AuthService";
 import useAuthContext from "../Hook/UseAuthContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AuthService } from "../Services/AuthService";
 
 type RootStackParamList = {
   Login: { name: string };
@@ -20,20 +21,22 @@ export default function LoginScreen({ navigation }: ProfileScreenProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { setToken } = useAuthContext(); // Usando o AuthContext
+  const { setToken } = useAuthContext();
 
   const handleLogin = async () => {
-    try {
-      const response = await AuthService.login(email, password);
 
-      if (!response) {
-        throw new Error("No token received from the server");
+    await AuthService.login({
+      email: email,
+      password: password,
+    }).then((response) => {
+      if (response.status === 200) {
+        AsyncStorage.setItem('token', response.data.token);
+        navigation.navigate('Home', { name: 'Home' });
+        setToken(response.data.token);
       }
-
-      setToken(response); // Atualizando o token no contexto
-    } catch (error) {
-      console.error("Error login user:", error);
-    }
+    }).catch(err => {
+      console.error('Error login user:', err);
+    });
   };
 
   return (

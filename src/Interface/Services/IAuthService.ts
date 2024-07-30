@@ -1,8 +1,10 @@
+import { AxiosResponse } from "axios";
 import { JwtPayload } from "jwt-decode";
+import { IUserLoginDto } from "../Dto/IUserLoginDto";
 
 export interface IUserService {
   registerUser(userName: string, email: string, password: string, confirmPassword: string, cpf: string, role: number): Promise<any>;
-  login(email: string, password: string): Promise<any>;
+  login(loginDto: IUserLoginDto): Promise<AxiosResponse<{ token: string }, any>>;
   forgetPassword(email: string): Promise<any>;
   resetPassword(token: string, newPassword: string): Promise<any>;
   deleteUser(id: string): Promise<any>;

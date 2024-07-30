@@ -2,6 +2,8 @@ import axios from 'axios';
 import { IUserService } from '../Interface/Services/IAuthService';
 import { JwtPayload, jwtDecode } from 'jwt-decode';
 import { API_BASE_URL } from './IpConfig';
+import ApiVarzeaLeague from './ApiVarzeaLeague';
+import { IUserLoginDto } from '../Interface/Dto/IUserLoginDto';
 
 export const AuthService: IUserService = {
   registerUser: async (userName: string, email: string, password: string, confirmPassword: string, cpf: string, role: number) => {
@@ -21,13 +23,19 @@ export const AuthService: IUserService = {
     }
   },
 
-  login: async (email: string, password: string) => {
+  login: async ({email, password}: IUserLoginDto) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/v1/Auth/login`, {
-        email,
-        password,
+      const response = await ApiVarzeaLeague(`Auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: {
+          email,
+          password,
+        },
       });
-      return response.data.token;
+      return response;
     } catch (error) {
       console.error('Error logging in:', error);
       throw error;
@@ -110,6 +118,7 @@ export const AuthService: IUserService = {
   decodeToken: async (token: string) => {
     try {
       const decoded: JwtPayload = jwtDecode(token);
+      console.log(decoded);
       return decoded;
     } catch (error) {
       console.error('Erro ao decodificar token:', error);

@@ -1,7 +1,7 @@
 import { AnimatableNumericValue, DimensionValue, StyleSheet } from "react-native";
 import { COLORS } from "../../Styles/GlobalColors";
 
-const styles = (width: DimensionValue, height: DimensionValue, borderRadius: AnimatableNumericValue) => StyleSheet.create({
+const styles = (width: DimensionValue, height: DimensionValue, borderRadius: AnimatableNumericValue, marginTop: number) => StyleSheet.create({
     container: {
         width: width,
         height: height,
@@ -10,7 +10,7 @@ const styles = (width: DimensionValue, height: DimensionValue, borderRadius: Ani
         padding: 12,
         alignItems: "center",
         justifyContent: "center",
-        marginTop: 10
+        marginTop: marginTop
     },
 
     text: {

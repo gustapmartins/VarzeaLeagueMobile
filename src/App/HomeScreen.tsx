@@ -6,10 +6,9 @@ import Search from "../Components/Search";
 import globalStyles from "../Styles/Global";
 import { useEffect, useState } from "react";
 import { MatchService } from "../Services/MatchService";
-import { MatchViewDto } from "../Interface/Dto/IMatchDto";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Button from "../Components/Button";
 import UseMatchContext from "../Hook/UseMatchContext";
+import Filter from "../Components/Filter";
 
 type RootStackParamList = {
   Home: { name: string };
@@ -56,10 +55,7 @@ export default function HomeScreen({ navigation, route }: ProfileScreenProps) {
 
       <Search matches={matchs} />
 
-      <View style={{ marginVertical: 10 }} >
-        <Text>Last Transaction</Text>
-        <Button></Button>
-      </View>
+      <Filter />
 
       <FlatList
         data={matchs}

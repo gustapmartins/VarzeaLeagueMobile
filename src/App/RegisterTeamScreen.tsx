@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import Button from "../Components/Button";
 import Input from "../Components/Input";
@@ -7,8 +7,8 @@ import globalStyles from "../Styles/Global";
 import ToBack from "../Components/ToBack";
 import TextComponent from "../Components/TextComponent";
 import { TeamService } from "../Services/TeamService";
-import useAuthContext from "../Hook/UseAuthContext";
 import { ITeamCreateDto } from "../Interface/Dto/ITeamDto";
+import useAuthContext from "../Hook/UseAuthContext";
 
 type RootStackParamList = {
   RegisterTeam: { name: string };
@@ -25,7 +25,7 @@ export default function RegisterTeam({ navigation }: ProfileScreenProps) {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
 
-  const {token} = useAuthContext(); // Usando o AuthContext
+  const { token } = useAuthContext(); // Usando o AuthContext
 
   const handleRegisterTeam = async () => {
     try {
@@ -33,8 +33,8 @@ export default function RegisterTeam({ navigation }: ProfileScreenProps) {
       if (token) {
         throw new Error("No token found");
       }
-      
-      const teamData: ITeamCreateDto = { 
+
+      const teamData: ITeamCreateDto = {
         NameTeam: nameTeam,
         City: city,
         State: state

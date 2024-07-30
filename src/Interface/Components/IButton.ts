@@ -5,5 +5,6 @@ export interface IButton {
   widthButton?: DimensionValue;
   heightButton?: DimensionValue;
   borderRadius?: AnimatableNumericValue;
+  marginTop?: number;
   onPress?: (event: GestureResponderEvent) => void
 }

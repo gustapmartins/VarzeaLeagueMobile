@@ -19,6 +19,7 @@ import { NotificationService } from "../Services/NotificationService";
 import useAuthContext from "../Hook/UseAuthContext";
 import UseUserContext from "../Hook/UseUserContext";
 import UseNotificationContext from "../Hook/UseNotificationContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type RootStackParamList = {
   Profile: { name: string };
@@ -85,6 +86,7 @@ export default function ProfileScreen({ navigation }: ProfileScreenProps) {
 
   const logout = async () => {
     try {
+      await AsyncStorage.removeItem('token');
       setToken("");
     } catch (error) {
       console.error("Erro ao verificar token:", error);
