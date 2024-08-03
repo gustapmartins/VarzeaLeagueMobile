@@ -2,11 +2,12 @@ import axios from 'axios';
 import { IMatchService } from '../Interface/Services/IMatchService';
 import { API_BASE_URL } from './IpConfig';
 import { MatchCreateDto } from '../Interface/Dto/IMatchDto';
+import ApiVarzeaLeague from './ApiVarzeaLeague';
 
 export const MatchService: IMatchService = {
   getMatches: async (page: number = 1, pageSize: number = 10) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/v1/Match/search-matchs`, {
+      const response = await ApiVarzeaLeague(`Match/search-matchs`, {
         params: { page, pageSize },
       });
       return response.data;

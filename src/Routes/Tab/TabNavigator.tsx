@@ -21,6 +21,8 @@ export function TabNavigator() {
   
   const { user } = UseUserContext(); // Usando o UserContext
 
+  console.log(user)
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -44,7 +46,7 @@ export function TabNavigator() {
         }}
       />
 
-      {user?.role === Role.Admin && (
+      {user !== null && Object.keys(user).length > 0 && (
         <Tab.Screen
           name="ControlPainelStack"
           component={ControlPainelScreen}

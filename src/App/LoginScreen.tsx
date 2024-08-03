@@ -24,7 +24,7 @@ export default function LoginScreen({ navigation }: ProfileScreenProps) {
   const { setToken } = useAuthContext();
 
   const handleLogin = async () => {
-
+    
     await AuthService.login({
       email: email,
       password: password,
