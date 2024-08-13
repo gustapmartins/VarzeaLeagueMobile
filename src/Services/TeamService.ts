@@ -2,6 +2,7 @@ import axios from 'axios';
 import { ITeamService } from '../Interface/Services/ITeamService';
 import { API_BASE_URL } from './IpConfig';
 import { ITeamCreateDto } from '../Interface/Dto/ITeamDto';
+import ApiVarzeaLeague from './ApiVarzeaLeague';
 
 export const TeamService: ITeamService = {
   
@@ -10,7 +11,7 @@ export const TeamService: ITeamService = {
       const response = await axios.get(`${API_BASE_URL}/api/v1/Team/search-teams`, {
         params: { page, pageSize }
       });
-      return response.data;
+      return response;
     } catch (error) {
       console.error("Error fetching teams:", error);
       throw error;
@@ -20,22 +21,28 @@ export const TeamService: ITeamService = {
   async getTeamById(id: string) {
     try {
       const response = await axios.get(`${API_BASE_URL}/api/v1/Team/search-team/${id}`);
-      return response.data;
+      return response;
     } catch (error) {
       console.error("Error fetching team by ID:", error);
       throw error;
     }
   },
 
-  async createTeam(teamData: ITeamCreateDto, Token: String) {
+  async createTeam({NameTeam, State, City}: ITeamCreateDto, token: String) {
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/v1/Team/created-team`, teamData, {
+      const response = await ApiVarzeaLeague(`Team/created-team`, {
+        method: 'POST',
         headers: {
-          Authorization: `Bearer ${Token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
+        },
+        data: {
+          NameTeam,
+          State,
+          City
         }
       });
-      return response.data;
+      return response;
     } catch (error) {
       console.error("Error creating team:", error);
       throw error;
@@ -49,7 +56,7 @@ export const TeamService: ITeamService = {
   }) {
     try {
       const response = await axios.patch(`${API_BASE_URL}/api/v1/Team/update-team/${id}`, teamUpdateDto);
-      return response.data;
+      return response;
     } catch (error) {
       console.error("Error updating team:", error);
       throw error;
@@ -59,7 +66,7 @@ export const TeamService: ITeamService = {
   async deleteTeam(id: string) {
     try {
       const response = await axios.delete(`${API_BASE_URL}/api/v1/Team/delete-team/${id}`);
-      return response.data;
+      return response;
     } catch (error) {
       console.error("Error deleting team:", error);
       throw error;

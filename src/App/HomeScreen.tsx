@@ -27,9 +27,7 @@ export default function HomeScreen({ navigation, route }: ProfileScreenProps) {
     const fetchMatches = async () => {
       try {
         const response = await MatchService.getMatches(1, 10);
-
-        setMatchs(response);
-
+        setMatchs(response.data);
         setLoading(false);
       } catch (error) {
         setLoading(false);

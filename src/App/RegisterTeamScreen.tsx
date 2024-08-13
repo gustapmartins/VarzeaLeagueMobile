@@ -25,26 +25,24 @@ export default function RegisterTeam({ navigation }: ProfileScreenProps) {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
 
-  const { token } = useAuthContext(); // Usando o AuthContext
+  const { token } = useAuthContext(); 
 
   const handleRegisterTeam = async () => {
     try {
 
-      if (token) {
-        throw new Error("No token found");
+      if (!token) {
+        return;
       }
 
       const teamData: ITeamCreateDto = {
         NameTeam: nameTeam,
-        City: city,
-        State: state
+        State: state,
+        City: city
       };
 
-      const response = await TeamService.createTeam(teamData, token);
-      return response;
-
+      return await TeamService.createTeam(teamData, token);
     } catch (error) {
-      console.error('Error registering team:', error);
+      console.error('Error created team:', error);
     } finally {
       navigation.navigate('ControlPainel', { name: 'ControlPainel' });
     }

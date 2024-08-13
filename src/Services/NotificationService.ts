@@ -12,7 +12,7 @@ export const NotificationService: INotificationService = {
           'Content-Type': 'application/json',
         }
       });
-      return response.data;
+      return response;
     } catch (error) {
       console.error('Error fetching Notification:', error);
       throw error;

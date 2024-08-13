@@ -5,7 +5,6 @@ import Icon from "react-native-vector-icons/AntDesign";
 import ButtonNew from "../../Components/ButtoNew";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { COLORS } from "../../Styles/GlobalColors";
-import { Role } from "../../Enum/Role";[]
 import UseUserContext from "../../Hook/UseUserContext";
 
 
@@ -19,9 +18,7 @@ const Tab = createBottomTabNavigator<ProfileStackParamList>();
 
 export function TabNavigator() {
   
-  const { user } = UseUserContext(); // Usando o UserContext
-
-  console.log(user)
+  const { user } = UseUserContext();
 
   return (
     <Tab.Navigator

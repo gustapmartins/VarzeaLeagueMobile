@@ -5,6 +5,7 @@ type ProfileParamList = {
     ForgetPassword: { name: string };
     Notification: { name: string };
     NewPassword: { name: string };
+    VerifyTokenPassword: { name: string };
     Configuration: { name: string };
     ControlPainel: { name: string };
     RegisterUser: { name: string };

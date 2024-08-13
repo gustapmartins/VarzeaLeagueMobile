@@ -16,7 +16,7 @@ export default function NotificationCard({
       <View style={styles.cardNotification}>
           <View style={styles.sectionText}>
             <Text style={styles.textNotification}>{TextNotification}</Text>
-            <Text style={styles.dateCreatedNotification}>{dateCreated}</Text>
+            <Text style={styles.dateCreatedNotification}>{dateCreated?.toString()}</Text>
           </View>
           <View style={styles.sectionIcon}>
             <Icon style={{...styles.icon, color: readNotification ? COLORS.fail : COLORS.success}} name={readNotification ? "caret-down-circle-outline" : "caret-up-circle-outline"} />

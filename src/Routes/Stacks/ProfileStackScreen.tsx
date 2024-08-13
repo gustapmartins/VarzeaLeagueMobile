@@ -5,42 +5,16 @@ import LoginScreen from "../../App/LoginScreen";
 import ProfileParamList from "./ProfileParamList";
 import NewPasswordScreen from "../../App/NewPasswordScreen";
 import ForgetPasswordScreen from "../../App/ForgetPasswordScreen";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import NotificationScreen from "../../App/NotificationScreen";
 import ConfigurationScreen from "../../App/ConfigurationScreen";
-import { AuthService } from "../../Services/AuthService";
 import useAuthContext from "../../Hook/UseAuthContext";
+import VerifyTokenPassword from "../../App/VerifyTokenPassword";
 
 const ProfileStack = createNativeStackNavigator<ProfileParamList>();
 
 export default function ProfileStackScreen() {
-  const { token, setToken } = useAuthContext()!;
-
-  const [isSignedIn, setIsSignedIn] = useState(true);
-
-  useEffect(() => {
-    const checkToken = async () => {
-      if (token) {
-        try {
-          const decoded = await AuthService.decodeToken(token);
-          const currentTime = Date.now() / 1000; // current time in seconds
-          if (decoded.exp! < currentTime) {
-            setToken(""); // Limpa o token no contexto
-            setIsSignedIn(false);
-          } else {
-            setIsSignedIn(true);
-          }
-        } catch (error) {
-          console.error("Erro ao verificar token:", error);
-          setIsSignedIn(false);
-        }
-      } else {
-        setIsSignedIn(false);
-      }
-    };
-
-    checkToken();
-  }, [token]);
+  const { token } = useAuthContext()!;
 
   return (
     <ProfileStack.Navigator
@@ -48,7 +22,7 @@ export default function ProfileStackScreen() {
         headerShown: false,
       }}
     >
-      {isSignedIn ? (
+      {token !== "" ? (
         <>
           <ProfileStack.Screen
             name="Profile"
@@ -80,6 +54,13 @@ export default function ProfileStackScreen() {
             component={LoginScreen}
             options={{ headerShown: false }}
           />
+
+          <ProfileStack.Screen
+            name="VerifyTokenPassword"
+            component={VerifyTokenPassword}
+            options={{ headerShown: false }}
+          />
+          
           <ProfileStack.Screen
             name="NewPassword"
             component={NewPasswordScreen}

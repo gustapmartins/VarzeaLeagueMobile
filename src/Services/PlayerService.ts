@@ -2,6 +2,7 @@ import axios from 'axios';
 import { IPlayerService } from '../Interface/Services/IPlayerService';
 import { PlayerCreateDto } from '../Interface/Dto/IPlayerDto';
 import { API_BASE_URL } from './IpConfig';
+import ApiVarzeaLeague from './ApiVarzeaLeague';
 
 export const PlayerService: IPlayerService = {
   getPlayers: async (page: number = 1, pageSize: number = 10, teamId: string | null = null) => {
@@ -30,17 +31,23 @@ export const PlayerService: IPlayerService = {
     }
   },
 
-  createPlayer: async (playerData: PlayerCreateDto, token: string) => {
+  createPlayer: async ({ NamePlayer, Age, TeamId }: PlayerCreateDto, token: string) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/v1/Player/created-player`, playerData,
+      const response = await ApiVarzeaLeague(`Player/created-player`,
         {
+          method: 'POST',
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
+          },
+          data: {
+            NamePlayer,
+            Age,
+            TeamId,
           }
         }
       );
-      return response.data;
+      return response;
     } catch (error) {
       console.error('Error creating player:', error);
       throw error;

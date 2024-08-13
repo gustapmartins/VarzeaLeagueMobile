@@ -8,11 +8,13 @@ import Modal from "../Components/Modal";
 import globalStyles from "../Styles/Global";
 import { COLORS } from "../Styles/GlobalColors";
 import ToBack from "../Components/ToBack";
+import { AuthService } from "../Services/AuthService";
 
 type RootStackParamList = {
   ForgetPassword: { name: string };
   NewPassword: { name: string };
   Login: { name: string };
+  VerifyTokenPassword: { name: string };
 };
 
 type ProfileScreenProps = NativeStackScreenProps<
@@ -26,16 +28,27 @@ export default function ForgetPasswordScreen({
   const [email, setEmail] = useState("");
   const [showModal, setShowModal] = useState(false);
 
-  const ForgetPassword = () => {
-    setShowModal(true);
-    setTimeout(() => {
-      navigation.navigate("NewPassword", { name: "ForgetPassword" }); // Navegação para a tela 'Home'
-    }, 1800);
+  const ForgetPassword = async () => {
+    try {
+      navigation.navigate("VerifyTokenPassword", { name: "VerifyTokenPassword" }); // Navegação para a tela 'Home'
+
+      // var response = await AuthService.forgetPassword(email);
+
+      // if (response.status === 200) {
+      //   setShowModal(true);
+      //   setTimeout(() => {
+      //     navigation.navigate("VerifyTokenPassword", { name: "VerifyTokenPassword" }); // Navegação para a tela 'Home'
+      //   }, 1800);
+      // }
+    } catch (error) {
+      console.error("Error sending forget password request:", error);
+      return;
+    }
   };
 
   return (
     <View style={globalStyles.container}>
-      <ToBack onPress={() => navigation.navigate("Login", { name: "Login" })}/>
+      <ToBack onPress={() => navigation.navigate("Login", { name: "Login" })} />
 
       <View style={styles.form}>
         <View style={styles.container_img}>
@@ -68,7 +81,7 @@ export default function ForgetPasswordScreen({
       </View>
       {showModal && (
         <View style={styles.containerModal}>
-          <Modal text="Sucesso" IconName="checkcircleo" active={true} />
+          <Modal active={true} />
         </View>
       )}
     </View>

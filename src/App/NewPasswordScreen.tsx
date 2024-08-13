@@ -1,11 +1,11 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { COLORS } from "../Styles/GlobalColors";
 import Icon from "react-native-vector-icons/AntDesign";
 import Button from "../Components/Button";
 import Input from "../Components/Input";
 import Modal from "../Components/Modal";
-import { COLORS } from "../Styles/GlobalColors";
 
 type RootStackParamList = {
   ForgetPassword: { name: string };
@@ -65,12 +65,16 @@ export default function NewPasswordScreen({ navigation }: ProfileScreenProps) {
           checkField={false}
         />
 
-        <Button labelButton="Redefinir" borderRadius={10} onPress={NewPassword} />
+        <Button
+          labelButton="Redefinir"
+          borderRadius={10}
+          onPress={NewPassword}
+        />
       </View>
 
       {showModal && (
         <View style={styles.containerModal}>
-          <Modal  text="Sucesso" IconName="checkcircleo" active={true} />
+          <Modal active={true} />
         </View>
       )}
     </View>
@@ -126,5 +130,5 @@ const styles = StyleSheet.create({
   containerModal: {
     alignItems: "flex-end",
     justifyContent: "flex-end",
-  },
+  }
 });

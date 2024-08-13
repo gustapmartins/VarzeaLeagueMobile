@@ -1,25 +1,19 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import {
-  Image,
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
-  TouchableOpacity,
-} from "react-native";
+import { Image, StyleSheet, Text, View, SafeAreaView, TouchableOpacity } from "react-native";
 import { COLORS } from "../Styles/GlobalColors";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
 import globalStyles from "../Styles/Global";
 import ToBack from "../Components/ToBack";
 import NotificationButton from "../Components/NotificationButton";
 import { AuthService } from "../Services/AuthService";
 import { IUserModel } from "../Interface/Model/IUserModel";
-import { NotificationService } from "../Services/NotificationService";
 import useAuthContext from "../Hook/UseAuthContext";
 import UseUserContext from "../Hook/UseUserContext";
 import UseNotificationContext from "../Hook/UseNotificationContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { NotificationService } from "../Services/NotificationService";
+import { ActivityIndicator } from "react-native-paper";
 
 type RootStackParamList = {
   Profile: { name: string };
@@ -33,72 +27,93 @@ type RootStackParamList = {
 type ProfileScreenProps = NativeStackScreenProps<RootStackParamList, "Profile">;
 
 export default function ProfileScreen({ navigation }: ProfileScreenProps) {
-
   const { notifications, setNotifications } = UseNotificationContext();
   const { token, setToken } = useAuthContext();
   const { user, setUser } = UseUserContext();
+  const [loading, setLoading] = useState(true);
+
+  const filterNotificationRead = notifications.filter(
+    (notification) => notification.ReadNotification === false
+  );
+
+  const fetchMatches = async () => {
+    try {
+      if (token !== "") {
+        if (notifications !== null && Object.keys(notifications).length > 0) {
+          setLoading(false);
+        }
+
+        const response = await NotificationService.getNotification(
+          token,
+          1,
+          10
+        );
+
+        setNotifications(response.data);
+        setLoading(false);
+      }
+    } catch (error) {
+      setLoading(false);
+    }
+  };
 
   const loadUser = async () => {
     try {
       if (!token) {
         return;
       }
-
       const response = await AuthService.decodeToken(token);
-
-      const deserializer = JSON.parse(JSON.stringify(response)) as IUserModel;
-
-      setUser(deserializer);
+      const currentTime = Date.now() / 1000; // current time in seconds
+      if (response.exp! < currentTime) {
+        await AsyncStorage.removeItem("token");
+        setToken(""); // Limpa o token no contexto
+      } else {
+        const deserializer = JSON.parse(JSON.stringify(response)) as IUserModel;
+        setUser(deserializer);
+      }
     } catch (error) {
       console.error("Erro ao verificar token:", error);
     }
   };
 
-  const fetchNotifications = async () => {
-    try {
-      
-      if(!token){
-        return;
-      }
-
-      const response = await NotificationService.getNotification(
-        token,
-        1,
-        10
-      );
-
-      console.log(response);
-
-      if (!response || response.length === 0) {
-        return null;
-      }
-
-      setNotifications(response);
-    } catch (error) {
-      console.error("Erro ao buscar notificações:", error);
-    }
-  };
-
   useEffect(() => {
-    fetchNotifications();
     loadUser();
+    fetchMatches();
   }, [token]);
 
   const logout = async () => {
     try {
-      await AsyncStorage.removeItem('token');
+      await AsyncStorage.removeItem("token");
       setToken("");
     } catch (error) {
       console.error("Erro ao verificar token:", error);
     }
   };
 
+  if (loading) {
+    return (
+      <SafeAreaView style={globalStyles.container}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <ToBack onPress={() => navigation.navigate("Home", { name: "Home" })} />
+        </View>
+        <View
+          style={[
+            globalStyles.container,
+            { flex: 1, justifyContent: "center", alignItems: "center" },
+          ]}
+        >
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={globalStyles.container}>
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <ToBack onPress={() => navigation.navigate("Home", { name: "Home" })} />
         <NotificationButton
-          counter={notifications.length}
+          counter={filterNotificationRead.length}
           onPress={() =>
             navigation.navigate("Notification", { name: "Notification" })
           }
@@ -158,7 +173,10 @@ export default function ProfileScreen({ navigation }: ProfileScreenProps) {
 
         <View style={styles.infoUser}>
           <Icon style={styles.icon} name="calendar" />
-          <Text style={styles.text}> {user?.dataCreated ? user.dataCreated.split(" ")[0] : ""} </Text>
+          <Text style={styles.text}>
+            {" "}
+            {user?.dataCreated ? user.dataCreated.split(" ")[0] : ""}{" "}
+          </Text>
         </View>
       </View>
 

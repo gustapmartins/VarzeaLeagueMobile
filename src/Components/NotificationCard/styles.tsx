@@ -28,14 +28,14 @@ const styles = StyleSheet.create({
   textNotification: {
     fontSize: 18,
     color: COLORS.text,
-    fontWeight: "700",
+    fontWeight: "500",
   },
 
   dateCreatedNotification: {
     paddingTop: 8,
     fontSize: 16,
     color: COLORS.textGray,
-    fontWeight: "400",
+    fontWeight: "500",
   }
 })
 

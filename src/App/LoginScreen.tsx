@@ -1,12 +1,14 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useState } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { useEffect, useState } from "react";
+import { Checkbox } from "expo-checkbox";
+import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import SocialMediaButton from "../Components/SocialMediaButton";
 import Button from "../Components/Button";
 import Input from "../Components/Input";
 import useAuthContext from "../Hook/UseAuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthService } from "../Services/AuthService";
+import { COLORS } from "../Styles/GlobalColors";
 
 type RootStackParamList = {
   Login: { name: string };
@@ -20,23 +22,50 @@ type ProfileScreenProps = NativeStackScreenProps<RootStackParamList, "Login">;
 export default function LoginScreen({ navigation }: ProfileScreenProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isSelected, setSelection] = useState(false);
 
   const { setToken } = useAuthContext();
 
+  useEffect(() => {
+    const getRememberedCredentials = async () => {
+      try {
+        const savedEmail = await AsyncStorage.getItem("rememberedEmail");
+        const savedPassword = await AsyncStorage.getItem("rememberedPassword");
+        if (savedEmail && savedPassword) {
+          setEmail(savedEmail);
+          setPassword(savedPassword);
+          setSelection(true);
+        }
+      } catch (error) {
+        console.error("Failed to load remembered credentials", error);
+      }
+    };
+
+    getRememberedCredentials();
+  }, []);
+
   const handleLogin = async () => {
-    
     await AuthService.login({
       email: email,
       password: password,
-    }).then((response) => {
-      if (response.status === 200) {
-        AsyncStorage.setItem('token', response.data.token);
-        navigation.navigate('Home', { name: 'Home' });
-        setToken(response.data.token);
-      }
-    }).catch(err => {
-      console.error('Error login user:', err);
-    });
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          AsyncStorage.setItem("token", response.data.token);
+          if (isSelected) {
+            AsyncStorage.setItem("rememberedEmail", email);
+            AsyncStorage.setItem("rememberedPassword", password);
+          } else {
+            AsyncStorage.removeItem("rememberedEmail");
+            AsyncStorage.removeItem("rememberedPassword");
+          }
+          navigation.navigate("Home", { name: "Home" });
+          setToken(response.data.token);
+        }
+      })
+      .catch((err) => {
+        console.error("Error login user:", err);
+      });
   };
 
   return (
@@ -78,14 +107,18 @@ export default function LoginScreen({ navigation }: ProfileScreenProps) {
         />
 
         <View style={styles.section}>
-          <Text
-            style={styles.text}
-            onPress={() =>
-              navigation.navigate("RegisterUser", { name: "RegisterUser" })
-            }
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => setSelection(!isSelected)}
+            style={{ flexDirection: "row" }}
           >
-            Primeiro acesso
-          </Text>
+            <Checkbox
+              color={COLORS.button}
+              value={isSelected}
+              onValueChange={() => setSelection(!isSelected)}
+            />
+            <Text style={{ ...styles.text, paddingLeft: 10 }}>Lembra-me</Text>
+          </TouchableOpacity>
           <Text
             style={styles.text}
             onPress={() =>
@@ -98,6 +131,18 @@ export default function LoginScreen({ navigation }: ProfileScreenProps) {
 
         <View style={styles.sectionSocialMedia}>
           <SocialMediaButton />
+        </View>
+
+        <View style={styles.container_register}>
+          <Text style={{ fontSize: 15 }}>Ainda não possui uma conta? </Text>
+          <Text
+            style={styles.span}
+            onPress={() =>
+              navigation.navigate("RegisterUser", { name: "Register-User" })
+            }
+          >
+            Cadastrar
+          </Text>
         </View>
       </View>
     </View>
@@ -121,7 +166,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     flex: 1,
-    gap: 20,
+    gap: 15,
   },
 
   img: {
@@ -136,9 +181,25 @@ const styles = StyleSheet.create({
   section: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
+    padding: 5,
+  },
+
+  container_register: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20,
+  },
+
+  span: {
+    fontWeight: "bold",
+    color: "#3a1cff",
+    paddingLeft: 8,
   },
 
   text: {
-    padding: 5,
+    fontWeight: "500",
+    color: "#0000FF",
   },
 });

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Image } from 'react-native';
 import { TextInput } from 'react-native-paper';
-import { MatchMock } from '../../Mock/MatchMock';
 import Icon from "react-native-vector-icons/AntDesign";
 import styles from './styles';
 import { ISearch } from '../../Interface/Components/ISearch';
@@ -14,10 +13,10 @@ export default function Search({ matches }: ISearch) {
         setSearchText(text);
     };
 
-    const filteredMatches = matches.filter(match =>
+    const filteredMatches = matches && Array.isArray(matches) ? matches.filter(match =>
         match.homeTeamModel.nameTeam.toLowerCase().includes(searchText.toLowerCase()) ||
         match.visitingTeamModel.nameTeam.toLowerCase().includes(searchText.toLowerCase())
-    );
+    ) : [];
 
     return (
         <>

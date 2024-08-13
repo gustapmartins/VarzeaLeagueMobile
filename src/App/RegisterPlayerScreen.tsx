@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import Button from "../Components/Button";
 import Input from "../Components/Input";
@@ -8,7 +8,6 @@ import ToBack from "../Components/ToBack";
 import TextComponent from "../Components/TextComponent";
 import { PlayerService } from "../Services/PlayerService";
 import { PlayerCreateDto } from "../Interface/Dto/IPlayerDto";
-import UseUserContext from "../Hook/UseUserContext";
 import useAuthContext from "../Hook/UseAuthContext";
 
 
@@ -32,8 +31,8 @@ export default function RegisterPlayer({ navigation }: ProfileScreenProps) {
   const handleRegisterPlayer = async () => {
     try {
 
-      if (token) {
-        throw new Error("No token found");
+      if (!token) {
+        return;
       }
 
       const playerData: PlayerCreateDto = {
@@ -45,7 +44,6 @@ export default function RegisterPlayer({ navigation }: ProfileScreenProps) {
       var response = await PlayerService.createPlayer(playerData, token);
 
       return response;
-
     } catch (error) {
       console.error('Error login user:', error);
     } finally {
